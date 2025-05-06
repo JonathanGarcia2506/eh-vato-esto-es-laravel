@@ -1,0 +1,769 @@
+Organizacion de un proyecto
+____________________________
+-Un proyecto en laravel, puede ser muiy cambiante;segun la configuracion que realices, as como los paquetes
+que instales puedes tener mas carpetas y archivos; a partir de la version 11 de laravel,tenemos algunos
+cambios importantes que debemos de tener en cuenta;veamos las carpetas y archivos principales de un 
+proyecto en laravel:
+
+La carpeta app
+_______________
+-La carpeta app contiene codigo central de la aplicacion.Esta es la carpeta central del proy6ecto en donde 
+pasaremos la mayor parte del tiempo; en este archivo estan casi todas las clases de la aplicacion.
+
+La carpeta Bootstrap
+_____________________
+-La carpeta de Bootstrap contiene el archivo app.php que arranca el framework; el primer archivo que se ejecuta 
+es el public/index.php que finalmente carga el mencionado archivo app.js.Esta carpeta tambien alberga una
+carpeta de cache que contiene archivos generados por el framework para la optimizacion del rendimiento, como
+los archivos de cache de rutas y servicios.Por lo general,mno es necesario hacer cambios aqui.
+
+La carpeta de config
+_____________________
+-La carpeta de onfig, como su nombre lo indica, contiene todos los archivos de configuracion de su aplicacion;
+base de datos,cors,jetsream,app y muchas más.
+
+La carpeta Database
+____________________
+-La carpeta de database contiene las migraciones de la base de datos, y los seeders. Si lo desea, tambien puede
+usar la carpeta para almacenar una base de datos SQLite.
+
+La carpeta lang
+________________
+-La carpeta lan alberga todos los archivos de idiomas; por defectos, no viene incluida en laravel 11; puedes
+publicar la carpeta en caso de que requieras usar multiples lenguajes en tu aplicacion.
+
+<!-- php artisan lang:publish-->
+
+La carpeta public
+__________________
+-La carpeta public contiene el archivo index.php, que es el punto de entrada para todas las solicitudes que
+ingresan a su aplicacion y configura la carga automatica.Esta carpeta tambien alberga archivos que pueden ser
+manejados por el navegador como imágenes, JavaScript y CSS.
+
+La carpeta de resources
+-La carpeta de routes contiene todas las definiciones de ruta para su aplicacion. De forma predeterminada, se
+incluyen varios archivos de ruta con laravel:web.php, console.php:
+
+        1. El archivo web.php contiene rutas que son empleadas para manejar la aplicacion web;es decir, la que se 
+           consume mediante el navegador;estas rutas están configuradas para proporcionar estado de sesion,
+           proteccion CSRF y cifrado de cookies.
+
+        2. El archivo Channels.php es donde puedes registrar todos los canales de transmision de eventos que 
+           admite tu aplicacion.
+
+A partir de laravel 11,para publicar los siguientes archivos que fueron marcados como opcionales:
+
+        1. El archivo api.php contiene las rutas para la creacion de una Api Rest; estas rutas estan diseñadas para
+           no tener estado,por lo que las solicitudes que ingresan a la aplicacion a traves de estas rutas deben 
+           autenticarse mediante tokens y no tendrán acceso al estado de la sesión.
+
+        2. El archivo console.php es donde puede definir todos sus comandos de consola basados en artisan
+           mediante comandos.
+
+Debemos de ejecutar los comandos de artisan:
+
+<!-- $ php artisan install:api -->
+y 
+<!-- $ php artisan install:broadcasting -->
+
+
+La carpeta storage
+___________________
+-La carpeta storage contiene sus registros,plantillas Blade compiladas, sesiones basadas en arcivos caches de los 
+archivos y otros archivos generados por el framework;esta carpeta se puede usar para almacenar cualquier
+archivo generado por su aplicacion.
+
+
+La carpeta de tests
+-La carpeta de test contiene sus pruebas automatizadas;es decir, las pruebas unitarias de PHPUnit.
+
+
+La carpeta de vendor
+_____________________
+-La carpeta de vendor contiene sus dependencias de composer.
+
+
+La carpeta de app
+__________________
+-la mayor parte de la aplicacion se encuentra en la carpeta de app, que como mencionamos antes, es donde 
+pasaremos la mayor parte de nuestro tiempo;la mayoria de las clases se encuentran en esta carpeta y podemos
+definir archivos con configuraciones para distintos propositos.
+
+-En esta carpeta,se ubican otras carpetas;vamos a explicar las principales:
+
+    La carpeta Http
+    La carpeta Http contiene sus controladores,middleware  y solicitudes de formulario.
+
+    La carpeta de Models
+    La carpeta de models contiene todas las clases de modelos de Eloquent.cada tabla de la base de datos tiene un
+    "Modelo" correspondiente que se utiliza para interactuar con esa tabla.Los modelos le permiten consultar datos
+    en sus tablas,asi como insertar,actualizar y eliminar registros en la tabla.
+
+Crear un proyecto en laravel
+-En este apartado, conoceremos los mecanismos disponibles para crear un proyecto en Laravel.
+
+-En todos los sistemas operativos, tenemos dos posibilidades:
+    1. Instalar laravel mediante el instalador de laravel.
+    2. Instalar mediante composer.
+
+-Ambas formas son equivalentes,pero,para instalarlo mediante el instalador de Laravel,tenemos que instalarlo
+como si fuere una dependencia global a composer y mediante el instalador de laravel tenemos mas opciones de 
+personalizar el proyecto antes de su creación.
+
+Primeros pasos con laravel
+-Laravel como otros frameworks, contiene muchas funcionalidades que debemos de conocer para poder empezar
+a crear nuestras aplicaciones que pasan por el MVC y extendiendo el mismo desde alli con otros esquemas.
+
+Este apartado es fundamental,para emepezar a crear nuestras primeras aplicaciones;se da por hecho que ya 
+conoces de manera basica para que sirven las carpetas y arhivos principales en el framework.
+
+
+Modo desarrollador
+-Empecemos por el puntomas importante en este capitulo, o al menos el mas basico, elde poder ver los errores 
+que van a suceder cuando desarrollamoa la aplicacion. Antes de esto, para entender la importancia de este
+modo, vamos a ocacionar un error de sintaxis en nuestra aplicacion para ver que sucede;en el archivo
+
+<!-- routes/web.php -->
+
+Que tenemos:
+
+<!-- Route::get('/', funtion {
+    return view('Welcome');
+}); -->
+
+Modelo vista controlador
+_________________________
+-El patrón MVC es uno de los muchos patrones de diseño de software que existen en la actualidad, uno de los
+más empleados y del cual surgieron numerosas variantes como MTV,MVP,MVA,MVVM y un largo etc; como
+puede suponer, es un patrón escalable,adaptable y si tiene tantas variantes significa que tiene un gran
+potencial; framework como Laravel y por supuesto codelgniter, lo emplean para organizar nuestro código, que
+sea sencillo de mantener,adecuar cambios,mantenerlo y otros aspectos relacionados con los lineamiento que
+debemos de seguir para desarrollar cualquier tipo de aplicación.
+
+Laravel usa el pátron Modelo,Controlador(MVC); esto mantiene cada capa como partes separadas, pero
+funcionan en conjunto como un todo:
+
+    1. Los modelos administran los datos de la aplicacion y ayudan a hacer cumplir las reglas comerciales
+       especiales que la aplicacion pueda necesitar. 
+    2. Las vistas son archivos simples, con poca o ninguna lógica, que muestran la informacion al usuario; están
+       compuesta de HTML para la parte estatica y de PHP para la parte dinámica;aparte de CSS y JavaScript. 
+    3. Los controladores actuan como un código adhesivo, ordenado datos entre vista(o el usuario que los
+       está viendo) y el almacenamiento de datos, es decir,el modelo; este componente es donde generalmente
+       pasamos más tiempo (junto con la vista) ya que,tenemos que organizar todo lo que vamos a ver en la 
+       vista,aplicar validaciones y demás reglas según la logica de que programemos en nuestra aplicación.
+
+En su forma más basica, los controladores y modelos son simplemente clases que tienen un trabajo especifico
+que señalamos anteriormente;pero,siempre existen procesos que podemos reutilizar y esto, lo hacemos
+mediante la definicion de otras clasescomo servicios,archivos de ayuda etc; que pueden formar parte del 
+núcleo, es decir,parte del framework, o pueden ser definidas por ti,como parte de la aplicacion que estas
+creando o por terceros, instaladas o copiadas en el framework.
+
+Es importante señalar que,Laravel está un paso adelante del MVC ya que, ha evolucionado tanto que no es un 
+MVC puro por decirlo de alguna manera: podemos definir la misma logica del MVC de diversas formas; por
+ejemplo, para el controlador tenemos 3 formas de hacer lo mismo meidante rutas, controladores y componentes;
+en definitivas, para probar lo anterior, basta con revisar la carpeta de http del framework:
+
+
+
+Conociendo las rutas
+_____________________
+-Las rutas, son un esquema flexible que tenemos para vincular una URI a un proceso funcional; y este proceso
+funcional, puede ser:
+    1. Un callback,que es una funcion local definida en las mismas rutas.
+    2. Un controlador,que es una clase aparte.
+    3. Un componente, que es como un controlador,pero mas flexible.
+
+Si revisamos en la carpeta de routes; veremos que existen 4 archivos:
+    1. api:Para definir rutas de nuestras Apis Rest.
+    2. channels: Para la comunicacion fullduplex con los canales.
+    3. console: Para crear comandos con artisan
+    4. web: Las rutas para la aplicacion web.
+
+El que nos interesa en este capitulo es el de web.php; el cual permite definir las rutas de nuestra aplicacion web
+(las que nuestro cliente consume desde el navegador).
+
+Las rutas en laravel son un elemento central que nos permiten enlazar controladores, como poder desencadenar
+nuestros propios procesos;es decir, las rutas queno necesitan de los controladores para poder presentar un 
+contenido;y por ende, es el primer enfoque que vamos a presentar.
+
+use Illuminate\Support\facades\Routes;
+
+Que es interna a laravel y se conocen como Facades.
+
+Los Facades no son más que clases que nos permiten acceder a servicios propios el framework mediante
+clases estáticas.
+
+Finalmente, con esta clase, usamos una funcion llamada get(); para las rutas tenemos distintos métodos, tantos
+métodos como tipo de peticiones tenemos:
+
+    * POST crear un recurso con la funcion post()
+    * GET leer un recurso o coleccion con la funcion get()
+    * PUT actualizar un recurso con la funcion put()
+    * PATCH actualizar un recurso con la funcion patch()
+    * DELETE eliminar un recurso con la funcion delete()
+
+
+En este casp, empleamos una ruta de tipo get(), que conlleva a emplear una peticion el tipo GET.
+
+La funcion get(), al igual que el resto de la funciones señaladas anteriormente, reciben dos parametros:
+
+Route::<FuncionRecurso>(URI, Callback)
+
+    1. URI de la aplicacion
+    2. El callback viene siendo la funcion controladora, que en este caso es una funcion, pero puede ser la 
+       referencia a la funcion de un contralador o un componente.
+
+Y donde "FuncionRecurso" es la funcion get(), post(), put(), patch() o delete().
+
+En el ejemplo anterior, el "/" indica que es el root de la aplicacion, que es:
+
+https://larafirststept.test/
+
+O localhost s empleas macOS o Linux mediante Docker.
+
+En este caso, la parte funcional,viene siendo una funcion anonima; esta funcion, puede hacer cualquier cosa,
+devolver un JSON, un HTML, un documentp,enviar un email y un largo etc.
+
+En este ejemplo, devuelve una vista;  para devolver vistas se emplea la funcion de ayuda (helper) llamada view(),
+la cual referencia las vistas que existen en carpeta de:
+
+resource/view/<Vistas y carpetas>
+
+Por defectos, solamente existen un unico archivo; el llamado welcome.blade.php , y si, es el que estamos
+reverenciando en la ruta anterior con:
+
+return view('welcome);
+
+Fijate, que no es necesario ni indicar la ruta, ni la extencion de blade o php.
+
+Blade hace referencia al motor de plantillas que tiene Laravel que hablaremos sobre él un poco más adelante.
+
+Si revisas la vista de welcome.blade.php:
+
+véras que todo el HTML de la misma:
+
+<!-- <!DOCTYPE html> -->
+<!-- <html lang={{str_replace('_' '-', app()->getlocale()) }}> -->
+<!-- <head> -->
+<!-- <meta charset="utf-8"> -->
+<!-- meta name="viewport" content="width=device-width, initial-scale=1" -->
+<!-- <title> Laravel </title> -->
+
+RUTAS CON NOMBRE
+_________________
+-Otra configuracion que no puede faltar en tu aplicacion, es el uso d rutas con nombre;como indica el nombre,
+ le permite definir un nombre a una ruta.
+
+ Route::get('/escribeme', function() {
+    return "Contactame";
+ })->name('contacto');
+
+ Route::get('/custom', function{
+    $msj2 => "Mensake desde el servidor *-*";
+    $data => ['msj' => $msj2, "Edad" => 15];
+    return view('custom', $data);
+ });
+
+ Route::get('/', function(){
+    return ('welcome');
+ });
+
+ Route::get('/contacto', function(){
+    return "Que disfruten mi web";
+ })->name("Bienvenidos");  
+
+ Para eso se emplea una funcion llamada name() a la cual se le indica el nombre; para emplearla a la vista
+
+ <head>
+    <meta charset="UTF-8">
+    <meta http-equi="X-UA-Compatible" content="IE=Edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+ </head>
+
+ <body>
+    <p>{{ $msj2 }}</p>
+    <p>{{ $edad }}</p>
+ </body>
+ <html>
+
+ Esto es particulamente útil,ya que,puedes cambiar la URI de la ruta, agruparla o aplicarle cualquier otra
+ configuracion, pero, mientras tengas el nombre definido en la ruta y uses este nombre para referenciarla.Laravel
+ va a actualizarla automaticamente;para emplearla:
+
+ <a href="{{ route('bienvenido') }}">Enlace</a>
+
+
+
+ ARTISAN LA LINEA DE COMANDOS
+ _____________________________
+ -Laravel dispone de una linea de comandos (CLI) sencilla y muy po tente conocida como artisan; artisan no es
+ más que un archivo que se ubica en la raíz de nuestro proyecto con el nombre de 'artisna' y permite ejecutar una
+ serie de comandos preestablecidos; por supuesto, podemos extender los comandos que nos ofrece el propio
+ framework programando comandos propios; pero este es otro tema; en definitiva, podemos dividir los comandos
+ que podemos emplear en tres grupos:
+
+ Comandos para generar archivos:
+    1. Crear migraciones, de esto hablaremos mas tarde, pero no son mas que archivos que guardan la
+       estructura de una tabla que el framework mapeara a la base de datos.
+    2. Generar seeds o semillas para datos de prueba.
+    3. Generar controladores y otros tipos de archivo.  
+
+Comandos para manejar procesos:
+      1. Levantar un serivdor de un desarrollo, por si no quieres emplear Apache u otros servidores soportados por el
+         framework.
+      2. Ejecutar o devolver migraciones.
+      3. Limpiar caches.
+      4. Manejar la base de datos.
+      5. Ejecutar las migraciones y seeds.
+
+Comandos para obtener informacion del proyecto:
+      1. Listado de comandos.
+      2. Listado de las rutas del proyecto.
+
+ Entre otros comandos que puedes ver ejecutando a nivel del proyecto:
+   $  php artisan
+ Si etsas usando Laravel sail, y no tienes PHP 8 instalado a nivel del sistema operativo; debes de ejecutar:
+   $ ./vendor/bin/sail artisan
+ 
+ Y esto es importante de señalar,ya que, seria la forma que debes de interactuar con artisan en caso de no tener
+ PHP 8 a nivel de sistema.
+
+
+Comandos más empleados
+_______________________
+Para que tengas una lista de los comandos; te recomiendo que lo copies y la leas de algunas veces al dia y te
+familiarices con estos comandos que son los más empleados al momentos de desarrollar en Laravel:
+      1. php artisan make:controller: Para crear controladores.
+      2. php artisan make:migration: Para generar un archivo de migración.
+      3. php artisan migrate: Para generar una migracion y relacionados como el rollback para devolver las 
+         migraciones.
+      4. php artisan routes: Para ver las rutas de la aplicación.
+
+No te preocupes si no comprendes el propósitos de estas funciones,más adelante veremos en detalle el
+funcionamiento de cada uno de estos elementos.
+
+
+Redirecciones
+______________
+-Muchas veces necesitamos mandar de una pagina a otra, ya sea porque la pagina que está intentando ingresar
+el usuario no esta disponible, o porque la funcion en si no devuelve una vista;por ejemplo, los procesos que se 
+encargan de procesar los datos recibidos por formulario, usualmente no devuelven una vista; para hacer las
+redirecciones tenemos tres formas.
+
+Con esta funcion podemos redireccionar con la URI:
+
+return redirect("/post/create"); //redirecciona a la vista de una URI
+
+ Con esta funcion podemos redireccionar con la ruta con nombre:
+
+return redirect()route("post.create");
+
+Con esta funcion podemos redireccionar con una ruta con nombre, como el caso anterior, pero es más corto la
+sintaxis; esta funcion es nueva a partir de la version 9 de Laravel
+
+return to route("post.index"); // redirecciona a una ruta con nombre, igual a la anterior
+pero es el shortcut
+
+Directivas en Laravel para blade (vistas)
+__________________________________________
+-Las Directivas en Laravel proporcionan atajos convenientes para estructuras de control de PHP comunes, como
+sentencias condicionales y bucles.Estos accesos brindan una forma muy limpia y concisa de trabajar
+con estructuras de control de PHP.
+
+Las Directivas en laravel proporcionan atajos convenientes para estructuras de control de PHP comunes, como
+sentencias condicionales y bucles.Estos accesos directos brindan una forma muy limpia y concisa de trabajar
+con estructuras de control PHP.
+
+Asi que,las directivas no son más que un conjunto de funciones que podemos emplear para hacer lo mismo que
+hacemos en PHP, pero,de una manera mas limpia,tenemos directivas para muchas cosas, como incluir vistas,
+crear layouts ¿, condicionales y ciclos;por nombrar algunas.
+
+Directiva if
+_____________
+-Puede construir sentencias if utilizadolas directivas @if,@elseif,@else,@endif.Estas directivas funcionan
+de manera identica a sus contrapartes de PHP:
+
+@if($name !== "Andres Cruz")
+   Es true
+@else
+   no es true
+@endif
+
+
+Directiva foreach
+-Desde la funcion de view(), puedes pasar cualquier cosa, cualquier que pueda estar almacenada en un
+array():
+
+@foreach($array as $a)
+   <div class="box item">
+      <p>{{ $a }}</p>
+   </div>
+@endforeach
+
+
+Vistas y Controladores
+_______________________
+-Ya podemos a trabajar con la rutas y vistas, y vimos parte de su enorme potencial y organizacion;usar vistas
+ con las rutas, aunque es posible, es recomendado si la operacion que vamos a realizar es extremadamente
+ sencilla e independiente de otras funciones;por ejemplo:
+
+ Si quieres una pagina informativa, contacto de la empresa (sin formulario), un "acerca de"; que son vistas, de
+ por si, son netamente informativas y no están ligadas hacia otra pagina.
+
+ Pero si tenemos un CRUD, procesos de generar PDFs, cargar archivos,página de login;generar JSON o
+ similares, entre otros, empleamos los controladores, que ofrecen un enfoque más modular y con mejores
+ prestaciones u opciones para realizar diversas operaciones como:
+
+      *  Procesar formularios
+      *  Inyectar dependencias
+      *  Devolver JSON
+      *  Heredar de otras clases .
+
+
+Entre otras cosas
+
+Los controladores son la otra capa de nuestro MVC que estan destinados a manejar la conexion entre el modelo,
+que es la fuente de datos, y a la vista, que es la capa de presentacion para el usuario
+
+Para crear un controlador, podemos usar artisan, es decir, nuestra linea de comandos, y para eso tenemos el
+comando de:
+
+$ php artisan make:controller
+
+En el cual, si queremos ver que opciones tenemos
+
+$php artisan make:controller -h
+
+-h es el shorcut, de --help, que en definitiva, es la opcion de ayuda(puedes usar comodin para cualquier
+otro comando en laravel).
+
+Tendremos una salida como la siguiente:
+
+Description:
+   create a new controller class
+
+usage:
+ make:controller [options] [ -- ]<name>
+
+Arguments:
+  name               the name of the class
+
+
+Options:
+      --api                            Exclude the create and edit methods from the controller.
+      --type=TYPE                      Manaually specify the controller stub file to use.
+      --force                          Create the class even if the controller already exists.
+ -i,  --invokable                      Generate a single method, invokable controller class.
+ -m,  --model[=MODEL]                  Generate a resource controller for the given model.
+ -p,  --parent[=PARENT]                Generate a nested resource controller class.
+ -r,  --resource                       Generate a resource controller class.
+ -R,  --requests                       Generate FormRequest classes for store and update.
+      --test                           Generate an accompanying PHPUnit test for the controller.
+      --pest                           Generate an accompanying pest test for the controller.
+ -h,  --help                           Display help for the given command. when no command is given
+                                       display help for the list command.
+
+ -q,  --quiet                          Do not output any message.
+ -V,  --version                        Display this application version.
+      --ansi| --no-ansi                Force (or disable --no-ansi) ANSI outpit.
+ -n,  --no-interaction                 Do not ask any interactive question.
+      ..env[=ENV]                      The enviroment the command should run under.
+
+
+   -v|vv|vvv. --verbose  Increase the verbosity of messages: 1 for normal output, 2 for
+   more verbose output and 3 for debug
+
+Si estas usandp LaravelSail, y no tienes PHP 8 instalado a nivel del sistema operativo;debes de ejecutar:
+
+ $ ./vendor/bin/sail artisan make:controller -h
+
+Y hacer lo mismo con el rstp de los comandos que veas a partir de ahora.
+
+En la cual vemos que le podemos pasar opciones y un nombre.
+
+Tenemos muchas opciones, pero, las que generalmente usamos son 3:
+      1. Crear un controlador básico: php artisan make:controller TuControlador
+      2. Crear un controlador de tipo recurso: php artisan make:controller TuControlador -m
+      3. Crear un controlsdor (de tipo recurso) y su modelo: php artisan make:controller -r TuControlador -m
+         TuModelo
+
+Inclusive, podemos indicar una carpeta para almacenar tus controladores:
+
+$ php artisan make:controller -r php artisan make:controller -r TuCarpeta(s)/TuControlador
+-m TuModelo
+
+Que por supuesto, puedes combinar a tu antojo o necesidades las opciones presentadas.
+
+Ahora, veamos algunos controladores de ejemplo:
+
+$ php artisan make:controller TuControlador
+
+Otra opcion interesante, es que, podemos organizar nuestros controladores en carpetas; y esto está directamente
+relacionado con lo que hablamos anteriormente en que este tipo de componentes los podemos registrar dentro
+de carpetas:
+
+$ php artisan make:controller test/Tucontrolador
+
+MIGRACIONES
+_____________________________________________________________________________________________________________________
+|                                                                                                                    |
+|-Ya sabemos como trabajar con los controladores de manera básica,pero,no hemos podido enlazar con los               |
+| modelos ya que, el modeloes la entrada a la base de datos, especificamente una tabla;es decir, en nuestro          |
+| modelo llamado Post(en singular) necesitamos una tabla llamada posts (en plural), lo de colocar los nombre en      |
+| plural en singular son simplementes buenas practicas.                                                              |
+|                                                                                                                    |
+| Inicialmente en el libro configuramos la base de datos para nuestro proyecto y ahora, es momento de usarla,        |
+| nosotros no nos conectamos directamente a las tablas de la base de datos, la creacion de tablas de manera          |
+| directa no es recomendada al trabajar con el framework y practicamente cualquier framework web moderno del         |
+| lado del servidor en PHP,Node,Python y vale contar, siguen este mismo principio de evitar que los                  |
+| desarrolladores interactúen con la base de datos, y esto es genial por dos puntos:                                 |
+|      1.  Nos permite trabajar con la base de datos como un proceso más.                                            |
+|      2.  Nos permite un mejor desempeño al momento de trabajar en equipo.                                          |
+|                                                                                                                    |
+| Antes de explicar los dos puntos en detalle, vamos a mencionar cuál es la herramienta empleada para lograr tal     |
+| hazaña... Se conocen como migraciones, que no son mas que un sistema de control para la tablas.                    |
+|                                                                                                                    |
+| En definitiva, para empezar a trabajar con los modelos, necesitamos las tablas en la base de datos, y para         |
+| trabajar con las tablas, necesitamos las tablas, necesitamos las migraciones; comencemos por las migraciones.      |
+|                                                                                                                    |
+| Migraciones                                                                                                        |
+| Las migraciones son un sistea que nos permiten generar tablas en base a archivos PHPs (clases) una clase           |
+| por cada tabla en nuestra base de datos que nosotros definimos; mediante las migraciones (entiéndase clases)       |
+| podemos, o crear nuevas tablas, o modificar las existentes; una migracion luce como lo siguiente:                  |
+|                                                                                                                    |
+| <?php                                                                                                              |
+|                                                                                                                    |
+| use Illuminate\Database\Migrations\Migration;                                                                      |
+| use Illuminate\Database\Schema\Blueprint;                                                                          |
+| use Illuminate\Support\Facades\Schema;                                                                             |
+|                                                                                                                    |
+| return new class extends Migration                                                                                 |
+| {                                                                                                                  |
+|    % Run the migrations.                                                                                           |
+|                                                                                                                    |
+|    % @return void                                                                                                  |
+|                                                                                                                    |
+|    public function up(): void                                                                                      |
+|    {                                                                                                               |
+|       Schema::create('categories', function(Blueprint $table){                                                     |
+|          $table->id();                                                                                             |
+|          $table->timestamps();                                                                                     |
+|       });                                                                                                          |
+|    }                                                                                                               |
+| {                                                                                                                  |
+|    Run the migrations.                                                                                             |
+|                                                                                                                    |
+|    @return void                                                                                                    |
+|                                                                                                                    |
+|    public function down(): void                                                                                    |
+|    {                                                                                                               |
+|       Schema::dropIfExists('categories');                                                                          |
+| }                                                                                                                  |
+
+Explicacion del codigo anterior
+Lo primero que podemos notar es que, tenemos un new class y heredamos de una clase Migrarion, que es
+interna al framework y permite usar este clase como migracion; en cuando al new class, es una caracteristica de
+PHP que nos permite crear clases anónimas que es particularmente util para evitar conflictos entre clases; no
+necesitamos un nombre para esta clase ya que, no la vamos a referenciar en ninguna parte, estas clases son
+empleadas de manera interna para manejar las migraciones y más nada.
+
+Las migraciones constan de dos partes,por una parte tenemos la funcion de up(), en donde aplicamos las
+operaciones que queremos realizar sobre la base de datos:
+   1. Crear tablas.
+   2. Modificar una tabla existentes,agregando/removiendo columnas y/o indices.
+
+Tambien existe una funcion llamada down(), la cual es usada para revertir los cambios realizados en la funcion
+up(); es decir, si en la funcion de up() creamos una tabla, en down() la removemos, si en up() creamos una o
+varias columnas, en down() esa misma columna o columnas. Estose debe a que el sistema de
+migraciones nos permite tanto ejecutarlas, como revertir las operaciones anteriores.
+
+Puedes ver que en la funcion de up(), definimos el esquema, el cual,dado el nombre de la tabla,pdemos
+agregar/remover columnas;por defecto, ya Laravel nos define una estructura basica, en la cual:
+      *   Tenemos una columna para la PK $table->id()
+      *   Tenemos las columnas para las fechas de creacion y actualizacion $table->timestamps()
+
+Algunas operaciones para crear columnas son:
+   1. id() para generar una columna llamada id, autoinremental,biginteger y con la relacion de clave primaria
+      o primary key.
+   2. string() para indicar una columna de tipo varchar; recibe dso atributos, el nombre y la longitud.
+   3. timestamps() crea dos columnas de tipo timestamps, una para la fecha de cracion del registro, y la otra
+      para la fecha de actualizacion
+   4. foreignId() esta funcion nos permite crear la clave de tipo foránea; recibe un parametro de manera
+      obligatoria, con la cual indicamos el nombre del campo; esta funcion puede recibir más parametros para
+      indicar las relsciones pertinentes, pero, si respetamos las convenciones de nombre de laravel, no seria
+      necesario.
+   5. text permite crear una columna de tipo text, recibe un parametro, con la cual indicamos el nombre de la
+      columna.
+   6. enum() permite crear una columna de tipo enum(seleccionada) y recibe dos parametros, el nombre de la
+   columna, y los valores seleccionables presentado mediante un array.
+   7. onDelete() indica el comportamiento que van a tener los registros al ser eliminados en una relacion
+   foranea.
+
+A las cuales, puedes personalizar mediante modificadores; algunos de los mas comunes:
+   1. unsigned() para indicar que vas a ser tipo UNSIGNED.
+   2. nullable() para indicar que pueden ser nulos.
+   3. contrained() para crear el constrained/referencia a la tabla, usualmente se usa en conjunto con la
+      columna de tipo foreignId().
+
+Por aqui tienes el acceso a la documentacion oficial, para más detalles:
+
+https://laravel.com/docs/master/migrations#creating-columns
+
+Al fina, las migraciones no son mas que archivos que definen una estructura, que con un comando, reflejamos su
+estructura en la base de datos en una tabla; por lo tanto, una(o varias) migracion, define una tabla en la base de
+datos
+
+Por ejemplo, una migracion luce como la siguiente:
+
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+   run the migrations.
+
+   @return void
+
+   public function up(): void
+   {
+      Schema::create('categories', function(){
+         $table->id();
+         $table->string('title', 500)->nullable();
+         $table->string('slug', 500)->nullable();
+         $table->timestaps();
+      });
+   }
+   
+   <!-- reverse the migrations. -->
+
+   <!-- @return void -->
+
+   public function down(): void
+   {
+      Schema::dropIfExists('categories');
+   }
+}
+
+En cual, indicamos una columna para el id,titulo,slug y fechas.
+
+CREAR UNA MIGRACION
+____________________
+-Para crear una migracion, tenemos el siguiente comando:
+
+$php artisan make:migration <NombreMigracion>
+
+Al cual,le podemos definir una estructura mediante un conjunto de funciones como explicarnos anteriormente.
+Las migraciones se ubican en la carpeta de:
+
+database/migration
+
+y es importante señalar patrones como:
+create <tabla>_table
+
+O para modificar una tabla existentes:
+add<operacion>_<tabla>_table
+
+Ya que, si respetas estos patrones al momento de crear migracion; laravel auto completara parte del codigo,
+como el nombre de l tabla y las columnas de id y fechas; es decir, si no indicamos estos patrones:
+
+php artisan make:migration tablita
+<?php
+return new class extends Migration
+{
+   public function up(): void
+   {
+      //
+   }
+
+   public function down(): void
+   {
+      //
+   }
+}
+
+Y si indicamos un patron:
+
+php artisan make:migration createCategoriesTable
+
+<?php
+
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+
+   public function up(): void
+   {
+      Schema::create('categories', function(Blueprint, $table){
+         $table->id();
+         $table->timestaps();
+      });
+   }
+
+   public function down
+
+
+
+
+
+
+Caso practico
+______________
+-Vamos a crear un controlador:
+
+$ php artisan make:controller test/TuControlador
+
+En El cual vamos a tener el siguiente cuerpo:
+
+<?php
+namespace App\Http\Controller\Test;
+use App\Controllers\Controller;
+use Illuminate\Http\Reuquest;
+Class TuControlador extends Controller
+{
+   //
+}
+
+De momento, solamente vamos a imprimir una vista:
+
+public function index(){
+   return view('test.custom');
+}
+
+Y su ruta:
+
+Route::get('test', [TuControlador::class, 'index']);
+Veras algo como lo siguiente:
+
+AÑAAAAAAAAAAAAAA
+
+Por lo demás, puedes pasar parámetros como vimos anteriormente.
+
+Rutas de tipo CRUD (recurso)
+_____________________________
+Como hablamos anteriormente, las rutas se encuentran definidas en el archivo en:
+
+routes/web.php
+
+EN este lugar, Podemos definir nuestras rutas de tipo CRUD para un recurso en particular que queramos
+administrar;en este caso,posts o publicaciones:
+
+Route::get('post', [PostController::class, 'index']);
+Route::get('post/{post}', [PostController::Class, 'show']);
+Route::get('post/create', [PostController::Class, 'create']);
+Route::get('post/{post}/edit', [PostController::class, 'edit']);
+
+Route::post('post', [PostController::Class, 'Store']);
+Route::put('post/{post}' , [PostController::Class, 'update']);
+Route::destroy('post/{post}', [PostController::Class, 'destroy']);
+
+
+En donde, sin importar el tipo de funcion,recibe dos argumentos:
+   1. El segmento,que no es mas que un trozo o token de la URL, y que forma parte de URI de la aplicacion o
