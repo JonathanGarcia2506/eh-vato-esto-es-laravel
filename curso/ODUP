@@ -767,3 +767,194 @@ Route::destroy('post/{post}', [PostController::Class, 'destroy']);
 
 En donde, sin importar el tipo de funcion,recibe dos argumentos:
    1. El segmento,que no es mas que un trozo o token de la URL, y que forma parte de URI de la aplicacion o
+
+
+
+
+
+
+
+MVC y CRUD
+___________
+-En este capitulo vamos a tratar el MVC de laravel y explicar la comunicacion basica entre el controladoe con el 
+modelo y la vista; importante notar que, todavia no vamos a trabajar con el CRUD, ya que, antes necesitamos
+conocer este flujo y algunas configuraciones sobre modelos,
+
+Vamos a crear un controlador para administrar los posis:
+
+$php artisan make:controller -r Dashboard/PostController -m Post
+
+Con este comando, generalmente un controlador (ver el namespace para ubicar el controlador):
+
+<?php
+
+namespace App\Http\Controllers\Dashboard;
+
+use App\Http\Controllers\Controller;
+use App\Models\Post;
+use Illuminate\Http\Request;
+
+class PostController extends controller
+{
+   Display a listing of the resource.
+   @return \Illuminate\Http\Response
+
+   public function index()
+   {
+
+   }
+
+   Show the form for creating a new resource.
+   @return \Illuminate\Http\Response
+
+   public function create()
+   {
+
+   }
+
+
+   Show the form for creating a new resource.
+   @return \Illuminate\Http\Response
+
+   public function create()
+   {
+
+   }
+
+   Store a newly created resource in storage.
+   @param \Illuminate\Http\Request $request
+
+   @return \Illuminate\Http\Response
+
+   public function store(request $request)
+   {
+
+   }
+
+   Display the specified resource.
+
+   @param \App\Models\Post $post
+   @return \Illuminate\Http\Response
+
+   public function show(Post $post)
+   {
+      
+   }
+}
+
+Tipos devvueltos en los metodos de los controladores 
+
+cada una de método controladores, estan destinadas para que realicen una operacion en particular; como
+iremos viendo en los siguientes capitulos; veras que el tipo devuelto por cada metodo varia segun esta operacion
+que debe de realizar;por ejemplo:
+   * Response, Devolver una repiuesta como por ejmeplo una vista, o JSON.
+   * RedirectResponse, Devolver una redireccion, estos tipos de retorno se emplean en funciones las cuales
+     no es necesario que regrese una vista (como en el caso del metodo de index, que debe de devolver un 
+     listado) si no, operaciones como la de crear, actualizar y eliminar.
+   * view,Devolver una vista.
+
+<?php
+
+namespace App\Http\Controllers\Dashboards;
+
+use App\Http\Controllers\COntroller;
+use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class PostController extends controller
+{
+   Display a listing of the rsource
+
+   public function index(): Response
+   {
+      return Post::create(
+         [
+            'title' => "test",
+            'slug' => "test",
+            'content' => "test",
+            'category_id' => 1,
+            'description' => "test",
+            'posted' => "test",
+            'images' => "test",
+         ]
+      )
+   }
+}
+
+
+Relaciones foreanas 
+____________________
+-Antes de seguir, al tener los posts una relacion de tipo foranea con las categorias,crearemos un par de 
+ categorias para poder trabajar de manera en la base de datos:
+
+      id    | title    | slug    | create_at              | update_at
+      2     | Cate 2   | cate-2  | 2022-02-23 11:52:09    | 2022-02-23 11:52:10
+      1     | Cate 1   | cate-1  | 2022-02-23 11:52:11    | 2022-02-23 11:52:03
+
+                  Figura 5-1:Relaciones de categorias
+
+Como vimos en el capitulo anterior con las migraciones,creamos una relacion foránea entre las categorias y los
+posts, en este caso, es una relacion de uno a muchos en donde:
+
+   1. Un post solamente puede tener una categoria. 
+   2. Una categoría puede estar asignada a ninguno o muchos posts.
+
+Esto hace que si tenemos en la tabla posts algo como:
+
+
+      id    | title                 | category_id       
+          1 | Hola mundo Laravel    |                  1
+          2 | Hola mundo Laravel 2  |                  1
+          3 | Hola mundo Laravel 2  |                  2
+          4 | Hola mundo Laravel 5  |                  2
+          6 | Otro titulo           |                  2
+
+
+               Figura 5-2: Categorias de ejemplo
+
+En esencia, dos posts pertenecen a la categoria uno, y tres posts pertenecen a la categoria dos; si desde el post
+uno, preguntamos por la categoria acorde a la relacion que creamos anteriormente.
+
+Para reflejar este comportamiento en los modelos, basta con indicar la relacion de tipo belonsTo() a la entidad
+que guarde la relacion; en este caso, la de post en la que guarda la relacion de categoria;la relacion directa:
+
+Class Post extends Model
+{
+   use HasFactory
+
+   protected $fillable = ['title','slug','content','category_id','description','posted','image'];
+
+   public function category()
+   {
+      return $this->belongsTo(Category::class);
+   }
+}
+
+Y la de categorias, podemos obtener la relacion inversa; para eso, en este caso, empleamos la relacion de
+hasmany(); vamos a crear un modelo para las categorias:
+
+<?php
+
+namespace App\Models;
+
+use Illuminate\database\Eloquent\Factories\HasFactory
+use Illuminate\Database\Eloquent\Model;
+
+Class Category extends Model 
+{
+   use HasFactory;
+
+   protected $fillable = ['title','slug'];
+
+   public function posts()
+   {
+      return $this->hasMany(Post::class);
+   }
+}
+
+Como puedes ver, al final la relacion no es mas que, una funcion con cualquier nombre, que establece la relacion 
+correspondiente.
+
+Por supuesto, en laravel podemos manejar más tipos de relaciones:
